@@ -24,17 +24,30 @@ public class SecurityConfig {
 
     private static final String JWKS_URL = "https://exact-titmouse-99.clerk.accounts.dev/.well-known/jwks.json";
 
+    // TODO: Remove after demonstration of swagger as endpoint is insecure
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/public/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(new JwtAuthenticationFilter(clerkPublicKey()), UsernamePasswordAuthenticationFilter.class);
+                        .anyRequest()
+                        .permitAll()
+                );
+
         return http.build();
     }
+
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .authorizeHttpRequests(authz -> authz
+//                        .requestMatchers("/public/**").permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .addFilterBefore(new JwtAuthenticationFilter(clerkPublicKey()), UsernamePasswordAuthenticationFilter.class);
+//        return http.build();
+//    }
 
     @Bean
     public PublicKey clerkPublicKey() throws Exception {
