@@ -57,6 +57,9 @@ public class MentorEntity {
     @NotBlank(message = "Qualification must not be blank")
     @Column(name = "qualification", nullable = false)
     private String qualification;
+    @NotNull(message = "Mentor image must not be null")
+    @Column(name = "mentor_image", nullable = false)
+    private String mentorImage;
     @OneToMany(mappedBy = "mentorEntity", fetch = FetchType.EAGER)
     private List<SessionEntity> sessionEntityList = new ArrayList<>();
 }

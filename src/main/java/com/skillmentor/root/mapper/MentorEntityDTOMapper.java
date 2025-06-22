@@ -17,6 +17,7 @@ public class MentorEntityDTOMapper {
         mentorDTO.setSessionFee(mentorEntity.getSessionFee());
         mentorDTO.setTitle(mentorEntity.getTitle());
         mentorDTO.setSubject(mentorEntity.getSubject());
+        mentorDTO.setMentorImage(mentorEntity.getMentorImage());
         mentorDTO.setQualification(mentorEntity.getQualification());
         return mentorDTO;
     }
@@ -34,6 +35,7 @@ public class MentorEntityDTOMapper {
         mentorEntity.setSessionFee(mentorDTO.getSessionFee());
         mentorEntity.setTitle(mentorDTO.getTitle());
         mentorEntity.setSubject(mentorDTO.getSubject());
+        mentorEntity.setMentorImage(mentorDTO.getMentorImage());
         mentorEntity.setQualification(mentorDTO.getQualification());
         return mentorEntity;
     }
