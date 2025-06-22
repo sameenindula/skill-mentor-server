@@ -1,9 +1,7 @@
 package com.skillmentor.root.service.impl;
 
-import com.skillmentor.root.dto.AuditDTO;
-import com.skillmentor.root.dto.PaymentDTO;
-import com.skillmentor.root.dto.SessionDTO;
-import com.skillmentor.root.dto.SessionLiteDTO;
+import com.skillmentor.root.common.Constants;
+import com.skillmentor.root.dto.*;
 import com.skillmentor.root.entity.LiteSessionEntity;
 import com.skillmentor.root.entity.SessionEntity;
 import com.skillmentor.root.mapper.AuditDTOEntityMapper;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SessionServiceImpl implements SessionService {
@@ -67,5 +66,26 @@ public class SessionServiceImpl implements SessionService {
             Double totalFee = (Double) row[2];
             return new PaymentDTO(mentorId, mentorName, totalFee);
         }).toList();
+    }
+
+    @Override
+    public List<SessionDTO> getAllStudentSessions(String studentClerkId) {
+        List<SessionEntity> sessions = sessionRepository.findAll();
+        return sessions.stream()
+                .filter(session -> session.getStudentEntity().getClerkStudentId().equals(studentClerkId))
+                .map(SessionDTOEntityMapper::map)
+                .toList();
+    }
+
+    @Override
+    public SessionDTO updateSessionStatus(Integer sessionId, Constants.SessionStatus sessionStatus) {
+        Optional<SessionEntity> optionalSession = sessionRepository.findById(sessionId);
+        if (optionalSession.isEmpty()) {
+            throw new IllegalArgumentException("Session with ID " + sessionId + " not found.");
+        }
+        SessionEntity sessionEntity = optionalSession.get();
+        sessionEntity.setSessionStatus(sessionStatus);
+        SessionEntity updatedEntity = sessionRepository.save(sessionEntity);
+        return SessionDTOEntityMapper.map(updatedEntity);
     }
 }

@@ -22,6 +22,9 @@ public class MentorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mentor_id")
     private Integer mentorId;
+    @NotBlank(message = "Clerk mentor ID must not be blank")
+    @Column(name = "clerk_mentor_id", nullable = false, unique = true)
+    private String clerkMentorId;
     @NotBlank(message = "First name must not be blank")
     @Column(name = "first_name", nullable = false)
     private String firstName;

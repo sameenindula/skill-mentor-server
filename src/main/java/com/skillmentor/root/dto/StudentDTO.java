@@ -16,6 +16,9 @@ import lombok.NoArgsConstructor;
 public class StudentDTO {
     @JsonProperty("student_id")
     private Integer studentId;
+    @NotBlank(message = "Clerk student ID must not be blank")
+    @JsonProperty("clerk_student_id")
+    private String clerkStudentId;
     @NotBlank(message = "First name must not be blank")
     @JsonProperty("first_name")
     private String firstName;

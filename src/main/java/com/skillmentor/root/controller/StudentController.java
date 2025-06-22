@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,8 +28,6 @@ import java.util.List;
 @RequestMapping(value = "/academic")
 @Tag(name = "Student Management", description = "APIs for managing students")
 public class StudentController {
-
-
     private StudentService studentService;
 
     @Autowired
@@ -44,7 +43,7 @@ public class StudentController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @PreAuthorize(Constants.ADMIN_ROLE_PERMISSION)
+//    @PreAuthorize(Constants.ADMIN_ROLE_PERMISSION) // TODO: Change to STUDENT_ROLE_PERMISSION after configurations
     @PostMapping(value = "/student", consumes = Constants.APPLICATION_JSON, produces = Constants.APPLICATION_JSON)
     public ResponseEntity<StudentDTO> createStudent(
             @Parameter(description = "Student details to create", required = true)
@@ -72,23 +71,24 @@ public class StudentController {
         return new ResponseEntity<>(studentDTOS, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get student by ID", description = "Fetches a student by their unique ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Student retrieved successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid student ID"),
-            @ApiResponse(responseCode = "404", description = "Student not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    @PreAuthorize(Constants.ADMIN_ROLE_PERMISSION)
-    @GetMapping(value = "/student/{id}", produces = Constants.APPLICATION_JSON)
-    public ResponseEntity<StudentDTO> findStudentById(
-            @Parameter(description = "ID of the student to fetch", required = true)
-            @PathVariable @Min(0) Integer id
-    ) throws StudentException {
-        final StudentDTO student = studentService.findStudentById(id);
-        log.info("Find Student id:"+ id + "from server......");
-        return new ResponseEntity<>(student, HttpStatus.OK);
-    }
+    // TODO: Remove this method after demonstrations
+//    @Operation(summary = "Get student by ID", description = "Fetches a student by their unique ID")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Student retrieved successfully"),
+//            @ApiResponse(responseCode = "400", description = "Invalid student ID"),
+//            @ApiResponse(responseCode = "404", description = "Student not found"),
+//            @ApiResponse(responseCode = "500", description = "Internal server error")
+//    })
+//    @PreAuthorize(Constants.ADMIN_ROLE_PERMISSION)
+//    @GetMapping(value = "/student/{id}", produces = Constants.APPLICATION_JSON)
+//    public ResponseEntity<StudentDTO> findStudentById(
+//            @Parameter(description = "ID of the student to fetch", required = true)
+//            @PathVariable @Min(0) Integer id
+//    ) throws StudentException {
+//        final StudentDTO student = studentService.findStudentById(id);
+//        log.info("Find Student id:"+ id + "from server......");
+//        return new ResponseEntity<>(student, HttpStatus.OK);
+//    }
 
     @Operation(summary = "Update a student", description = "Updates an existing student based on the provided data")
     @ApiResponses(value = {
@@ -107,7 +107,43 @@ public class StudentController {
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
 
-    @Operation(summary = "Delete a student", description = "Deletes a student by their ID")
+    // TODO: Remove this method after demonstrations
+//    @Operation(summary = "Delete a student", description = "Deletes a student by their ID")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Student deleted successfully"),
+//            @ApiResponse(responseCode = "400", description = "Invalid student ID"),
+//            @ApiResponse(responseCode = "404", description = "Student not found"),
+//            @ApiResponse(responseCode = "500", description = "Internal server error")
+//    })
+//    @PreAuthorize(Constants.ADMIN_ROLE_PERMISSION)
+//    @DeleteMapping(value = "/student/{id}", produces = Constants.APPLICATION_JSON)
+//    public ResponseEntity<StudentDTO> deleteStudent(
+//            @Parameter(description = "ID of the student to delete", required = true)
+//            @PathVariable @Min(0) Integer id
+//    ) {
+//        final StudentDTO student = studentService.deleteStudentById(id);
+//        return new ResponseEntity<>(student, HttpStatus.OK);
+//    }
+
+    @Operation(summary = "Get student by Clerk ID", description = "Fetches a student by their unique Clerk ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Student retrieved successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid student ID"),
+            @ApiResponse(responseCode = "404", description = "Student not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+//    @PreAuthorize(Constants.ADMIN_ROLE_PERMISSION) // TODO: Change to STUDENT_ROLE_PERMISSION after configurations
+    @GetMapping(value = "/student/{id}", produces = Constants.APPLICATION_JSON)
+    public ResponseEntity<StudentDTO> findStudentById(
+            @Parameter(description = "ID of the student to fetch", required = true)
+            @PathVariable @NotNull String id
+    ) throws StudentException {
+        final StudentDTO student = studentService.findStudentByClerkId(id);
+        log.info("Find Student id:" + id + "from server......");
+        return new ResponseEntity<>(student, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Delete a student by Clerk ID", description = "Deletes a student by their unique Clerk ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Student deleted successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid student ID"),
@@ -116,11 +152,11 @@ public class StudentController {
     })
     @PreAuthorize(Constants.ADMIN_ROLE_PERMISSION)
     @DeleteMapping(value = "/student/{id}", produces = Constants.APPLICATION_JSON)
-    public ResponseEntity<StudentDTO> deleteStudent(
-            @Parameter(description = "ID of the student to delete", required = true)
-            @PathVariable @Min(0) Integer id
+    public ResponseEntity<StudentDTO> deleteStudentByClerkId(
+            @Parameter(description = "Clerk ID of the student to delete", required = true)
+            @PathVariable @NotNull String id
     ) {
-        final StudentDTO student = studentService.deleteStudentById(id);
+        final StudentDTO student = studentService.deleteStudentByClerkId(id);
         return new ResponseEntity<>(student, HttpStatus.OK);
     }
 }

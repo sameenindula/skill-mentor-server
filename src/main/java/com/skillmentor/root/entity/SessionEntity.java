@@ -1,11 +1,14 @@
 package com.skillmentor.root.entity;
 
+import com.skillmentor.root.common.Constants;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.Instant;
 
@@ -40,4 +43,8 @@ public class SessionEntity {
     @NotNull(message = "End time must not be null")
     @Column(name = "end_time", nullable = false)
     private Instant endTime;
+    @NotNull(message = "Session status must not be null")
+    @Column(name = "session_status", nullable = false)
+    @Enumerated(EnumType.STRING) // Stores enum as a string in the database
+    private Constants.SessionStatus sessionStatus = Constants.SessionStatus.PENDING;
 }

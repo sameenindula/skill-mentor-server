@@ -17,6 +17,9 @@ import lombok.NoArgsConstructor;
 public class MentorDTO {
     @JsonProperty("mentor_id")
     private Integer mentorId;
+    @NotBlank(message = "Clerk mentor ID must not be blank")
+    @JsonProperty("clerk_mentor_id")
+    private String clerkMentorId;
     @NotBlank(message = "First name must not be blank")
     @JsonProperty("first_name")
     private String firstName;
