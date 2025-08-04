@@ -26,4 +26,6 @@ public class ClassRoomDTO {
     private String classImage;
     @JsonProperty("mentor")
     private MentorDTO mentorDTO;
+    
+
 }
